@@ -1,9 +1,18 @@
-import express from 'express';
-const app = express();
-const PORT = 8000;
+import { typeDefs } from './typeDefs';
+import { resolvers } from './resolvers';
+import { ChuckAPI } from './datasource';
+import { ApolloServer } from 'apollo-server';
 
-app.get('/', (req, res) => res.send('Typescript with Express :). Now it is LIVE!!!'));
+const dataSources = () => ({
+  chuckAPI: new ChuckAPI(),
+});
 
-app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  dataSources,
+});
+
+server.listen().then(({ url }) => {
+  console.log(`🚀 Server ready at ${url}`);
 });
